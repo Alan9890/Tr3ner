@@ -3,10 +3,10 @@
 
   $db = new PDO("sqlite:tr5nr.sqlite");
   $db -> setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
+  $codig=2;
   try {
 
-    $res = $db -> query('select * from estacion');
+    $res = $db -> query('select * from estacion where codigo='.$codig);
 
 
     print '<table>';

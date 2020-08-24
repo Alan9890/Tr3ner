@@ -3,6 +3,7 @@
   $db = new PDO("sqlite:tr5nr.sqlite");
   $db -> setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
   session_start(); //Iniciaamos la sesion
+
   ?>
 <html lang="en">
   <head>
@@ -57,46 +58,57 @@
                            if(!empty($_POST['origen'])) {
                              $selected = $_POST['origen'];
                              $_SESSION["id_origen"]= $selected;
-
                            } else {
                              echo 'Please select the value';
                            }
                          }
                       ?>
                     </select>
-                      <!--<input type="submit" name="submit" vlaue="Choose options">-->
                   </form>
                   <td>
                     <?php
-                      $rest = $db -> query('SELECT nombre FROM estacion where codigo=10');
-                      echo "el valor es".$rest['nombre'];
+                      $res = $db -> query('select * from Estacion where codigo='.$_SESSION["id_origen"]);
+                    foreach ($res as $row) {
+                      print "Selected:".$row['nombre'];
+                    }
                     ?>
                   </td>
                </td>
 							</tr>
 							<tr class="table-active">
                 <th scope="row">Destino</th>
-								<td>
-                  <select>
-                    <?php
-                       try {
-                         $res = $db -> query('select nombre from estacion');
-                         //print '<table>';
-                         foreach ($res as $row) {
-                           echo '<option value="">' .$row['nombre'] . '</option>';
+                <td>
+                  <form action="" type='submit' method='POST'>
+                    <select name="destino" id="destino" onchange="this.form.submit()">
+                      <?php
+                         try {
+                           $res = $db -> query('SELECT * FROM estacion');
+                           foreach ($res as $row) {
+                             echo '<option value='.$row['codigo'].'>' .$row['nombre'] . '</option>';
+                           }
                          }
-                       }
-                       catch(PDOException $e) {
-                         print ("exception " . $e->getMessage());
-                       }
-                       ?>
-                     </select>
-                     <?php
-                       if(isset($_POST['origen'])){
-                           $_SESSION['origen'] = $_POST['origen'];
-                       }
+                         catch(PDOException $e) {
+                           echo ("exception " . $e->getMessage());
+                         }
+                         if(isset($_POST['destino'])){
+                           if(!empty($_POST['destino'])) {
+                             $selected = $_POST['destino'];
+                             $_SESSION["id_destino"]= $selected;
+                           } else {
+                             echo 'Please select the value';
+                           }
+                         }
+                      ?>
+                    </select>
+                  </form>
+                  <td>
+                    <?php
+                      $res = $db -> query('select * from Estacion where codigo='.$_SESSION["id_destino"]);
+                    foreach ($res as $row) {
+                      print "Selected:".$row['nombre'];
+                    }
                     ?>
-								</td>
+                  </td>
 						</tbody>
             <table class="table">
               <thead>
