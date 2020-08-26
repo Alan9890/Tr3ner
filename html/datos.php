@@ -69,7 +69,7 @@
                       $res = $db -> query('SELECT * FROM usuario where codigo='.$_SESSION["id_user"]);
                     foreach ($res as $row) {
                       print "Selected:".$row['tipo'];
-                      print $date;
+                      //print $date;
                     }
                     ?>
                   </td>
