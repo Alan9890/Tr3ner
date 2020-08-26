@@ -3,7 +3,11 @@
   $db = new PDO("sqlite:tr5nr.sqlite");
   $db -> setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
   session_start(); //Iniciaamos la sesion
-
+  $date = date('Y-m-d H:i:s');
+  function isWeekend($date) {
+    $weekDay = date('w', strtotime($date));
+    return ($weekDay == 0 || $weekDay == 6);
+  }
   ?>
 <html lang="en">
   <head>
@@ -21,7 +25,6 @@
 
   </head>
   <body>
-
     <div class="container-fluid">
 	<div class="row">
 		<div class="col-md-12">
@@ -101,9 +104,10 @@
                       ?>
                     </select>
                   </form>
+                </td>
                   <td>
                     <?php
-                      $res = $db -> query('select * from Estacion where codigo='.$_SESSION["id_destino"]);
+                      $res = $db -> query('SELECT * FROM Estacion where codigo='.$_SESSION["id_destino"]);
                     foreach ($res as $row) {
                       print "Selected:".$row['nombre'];
                     }
@@ -121,7 +125,19 @@
               <tbody>
                 <tr class="table-active">
                   <th scope="row">Proximo</th>
-                  <td>VALOR ACTUAL</td>
+                  <td>
+                    <?php
+                       try {
+                         $res = $db -> query('SELECT * FROM horario WHERE origen='.$_SESSION["id_origen"].' AND direccion='.$_SESSION["id_destino"]);
+                         if ($res) {
+                           //echo $res.['horario'];
+                         }
+                       }
+                       catch(PDOException $e) {
+                         echo ("exception " . $e->getMessage());
+                       }
+                    ?>
+                  </td>
                   <td>
                     <form method="get" action="proximos.php">
                       <button type="submit" class="btn btn-success">Ver proximos...
@@ -129,7 +145,7 @@
                   </td>
                 </tr>
                 <tr class="table-active">
-                  <th scope="row">Costo estudiante</th>
+                  <th scope="row">Costo </th>
                   <td>
                     PRINT
                   </td>
@@ -167,7 +183,7 @@
       Description
     </dt>
     <dd>
-      Desarrllo nativo para web developer
+      Tr5ner test web development
     </dd>
   </dl>
 </div>

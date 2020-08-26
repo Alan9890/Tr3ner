@@ -2,6 +2,9 @@
 <?php //PHP SQLITE connection
   $db = new PDO("sqlite:tr5nr.sqlite");
   $db -> setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+  $_SESSION["id_user"]=0;
+  $date = date('Y-m-d H:i:s');
+  session_start();
   ?>
 <html lang="en">
   <head>
@@ -39,22 +42,40 @@
 						<tbody>
 							<tr class="table-active">
                 <th scope="row">Tipo de usuario</th>
-								<td>
-                  <select>
-                    <?php
-                       try {
-                         $res = $db -> query('select tipo from usuario');
-                         //print '<table>';
-                         foreach ($res as $row) {
-                           echo '<option value="" selected= "selected?" onclick="this.parentNode.form.submit()">' .$row['tipo'] . '</option>';
+                <td>
+                  <form action="" type='submit' method='POST'>
+                    <select name="tipo_usuario" id="tipo_usuario" onchange="this.form.submit()">
+                      <?php
+                         try {
+                           $res = $db -> query('SELECT * FROM usuario');
+                           foreach ($res as $row) {
+                             echo '<option value='.$row['codigo'].'>' .$row['tipo'] . '</option>';
+                           }
                          }
-                       }
-                       catch(PDOException $e) {
-                         print ("exception " . $e->getMessage());
-                       }
+                         catch(PDOException $e) {
+                           echo ("exception " . $e->getMessage());
+                         }
+                         if(isset($_POST['tipo_usuario'])){
+                           if(!empty($_POST['tipo_usuario'])) {
+                             $selected = $_POST['tipo_usuario'];
+                             $_SESSION["id_user"]= $selected;
+                           } else {
+                             echo 'Please select the value';
+                           }
+                         }
+                      ?>
+                    </select>
+                  </form>
+                  <td>
+                    <?php
+                      $res = $db -> query('SELECT * FROM usuario where codigo='.$_SESSION["id_user"]);
+                    foreach ($res as $row) {
+                      print "Selected:".$row['tipo'];
+                      print $date;
+                    }
                     ?>
-                  </select>
-             </td>
+                  </td>
+               </td>
             </tr>
 						</tbody>
 					</table>
@@ -77,7 +98,7 @@
       Description
     </dt>
     <dd>
-      Desarrllo nativo para web developer
+      Tr5ner test web development
     </dd>
   </dl>
 </div>

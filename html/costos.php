@@ -61,7 +61,7 @@
       Description
     </dt>
     <dd>
-      Desarrllo nativo para web developer
+      Tr5ner test web development
     </dd>
   </dl>
 </div>

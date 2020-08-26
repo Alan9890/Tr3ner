@@ -1,4 +1,11 @@
 <!DOCTYPE html>
+<?php //PHP SQLITE connection
+  $db = new PDO("sqlite:tr5nr.sqlite");
+  $db -> setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+  $_SESSION["id_user"]=0;
+  $date = date('Y-m-d H:i:s');
+  session_start();
+  ?>
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -28,18 +35,31 @@
 						<thead>
 							<tr>
 								<th>
-									Mis datos
+									Horarios
 								</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr class="table-active">
-                <th scope="row">Tipo de cuenta</th>
+                <th scope="row">Tiempo</th>
 								<td>
-									Ciudad de destino! <!--AQUI VA A SER UN INPUT -->
+									Hora de llegada <!--AQUI VA A SER UN INPUT -->
 								</td>
 							</tr>
-
+              <tr class="table-active">
+                <?php
+                    try {
+                      $res = $db -> query('SELECT * FROM horario WHERE origen='.$_SESSION["id_origen"].'AND direccion='.$_SESSION["id_destino"]);
+                      //$res = $db -> query('select * from estacion where codigo=1');
+                      foreach ($res as $row) {
+                        print '<tr class="table active"><td>'.$row['hora']. '</td></tr>';
+                      }
+                    }
+                    catch(PDOException $e) {
+                      echo ("exception " . $e->getMessage());
+                    }
+                ?>
+              </tr>
 						</tbody>
 					</table>
 				</div>
@@ -61,7 +81,7 @@
       Description
     </dt>
     <dd>
-      Desarrllo nativo para web developer
+      Tr5ner test web development
     </dd>
   </dl>
 </div>
