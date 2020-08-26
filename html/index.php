@@ -50,6 +50,7 @@
                       <?php
                          try {
                            $res = $db -> query('SELECT * FROM estacion');
+                           echo '<option value="">Select...</option>';
                            foreach ($res as $row) {
                              echo '<option value='.$row['codigo'].'>' .$row['nombre'] . '</option>';
                            }
@@ -57,13 +58,9 @@
                          catch(PDOException $e) {
                            echo ("exception " . $e->getMessage());
                          }
-                         if(isset($_POST['origen'])){
-                           if(!empty($_POST['origen'])) {
+                         if(isset($_POST['origen']) OR $_POST['origen']=''){
                              $selected = $_POST['origen'];
                              $_SESSION["id_origen"]= $selected;
-                           } else {
-                             echo 'Please select the value';
-                           }
                          }
                       ?>
                     </select>
@@ -86,6 +83,7 @@
                       <?php
                          try {
                            $res = $db -> query('SELECT * FROM estacion');
+                            echo '<option value="">Select...</option>';
                            foreach ($res as $row) {
                              echo '<option value='.$row['codigo'].'>' .$row['nombre'] . '</option>';
                            }
@@ -93,13 +91,9 @@
                          catch(PDOException $e) {
                            echo ("exception " . $e->getMessage());
                          }
-                         if(isset($_POST['destino'])){
-                           if(!empty($_POST['destino'])) {
+                         if(isset($_POST['destino']) or $_POST['destino']='' ){
                              $selected = $_POST['destino'];
                              $_SESSION["id_destino"]= $selected;
-                           } else {
-                             echo 'Please select the value';
-                           }
                          }
                       ?>
                     </select>
@@ -127,15 +121,21 @@
                   <th scope="row">Proximo</th>
                   <td>
                     <?php
-                       try {
-                         $res = $db -> query('SELECT * FROM horario WHERE origen='.$_SESSION["id_origen"].' AND direccion='.$_SESSION["id_destino"]);
-                         if ($res) {
-                           //echo $res.['horario'];
-                         }
-                       }
-                       catch(PDOException $e) {
-                         echo ("exception " . $e->getMessage());
-                       }
+                      try {
+                        $res = $db -> query('SELECT * FROM horario WHERE origen='.$_SESSION["id_origen"].' AND direccion='.$_SESSION["id_destino"]);
+                        foreach ($res as $row) {
+                          $_SESSION['Proximo']=$row['hora'];
+                          if(!empty($_SESSION['Proximo'])){
+                            print $_SESSION['Proximo'];
+                          }elseif($_SESSION['Proximo']=''){
+                            print "No hay proximos";
+                          }
+                          break;
+                        }
+                      }
+                      catch(PDOException $e) {
+                        echo ("exception " . $e->getMessage());
+                      }
                     ?>
                   </td>
                   <td>

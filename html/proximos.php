@@ -45,14 +45,15 @@
 								<td>
 									Hora de llegada <!--AQUI VA A SER UN INPUT -->
 								</td>
-							</tr>
-              <tr class="table-active">
+
                 <?php
                     try {
-                      $res = $db -> query('SELECT * FROM horario WHERE origen='.$_SESSION["id_origen"].'AND direccion='.$_SESSION["id_destino"]);
+                      $res = $db -> query('SELECT * FROM horario WHERE origen='.$_SESSION["id_origen"].' AND direccion='.$_SESSION["id_destino"]);
                       //$res = $db -> query('select * from estacion where codigo=1');
                       foreach ($res as $row) {
                         print '<tr class="table active"><td>'.$row['hora']. '</td></tr>';
+
+                        $_SESSION['Proximo']=$row['hora'];
                       }
                     }
                     catch(PDOException $e) {

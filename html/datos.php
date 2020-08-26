@@ -22,7 +22,6 @@
 
   </head>
   <body>
-
     <div class="container-fluid">
 	<div class="row">
 		<div class="col-md-12">
@@ -48,6 +47,8 @@
                       <?php
                          try {
                            $res = $db -> query('SELECT * FROM usuario');
+                           echo '<option value="">Select...</option>';
+
                            foreach ($res as $row) {
                              echo '<option value='.$row['codigo'].'>' .$row['tipo'] . '</option>';
                            }
@@ -55,14 +56,11 @@
                          catch(PDOException $e) {
                            echo ("exception " . $e->getMessage());
                          }
-                         if(isset($_POST['tipo_usuario'])){
-                           if(!empty($_POST['tipo_usuario'])) {
+                         if(isset($_POST['tipo_usuario']) OR $_POST['tipo_usuario']=''){
                              $selected = $_POST['tipo_usuario'];
                              $_SESSION["id_user"]= $selected;
-                           } else {
-                             echo 'Please select the value';
-                           }
                          }
+
                       ?>
                     </select>
                   </form>
